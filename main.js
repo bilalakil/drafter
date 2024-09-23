@@ -82,6 +82,7 @@ const draftPickedCardContainer = document.getElementById("draft__picked__card-co
 const draftSideboardTitle = document.getElementById("draft__sideboard__title");
 const draftSideboardTitleTemplate = draftSideboardTitle.innerHTML;
 const draftSideboardCardContainer = document.getElementById("draft__sideboard__card-container");
+const draftBotPickedCardContainer = document.getElementById("draft__bot-picked__card-container");
 
 let botStates = [];
 
@@ -290,6 +291,16 @@ const refreshSideboardDisplay = () => {
     draftSideboardCardContainer.replaceChildren(...newChildren);
 };
 
+const refreshBotPickedDisplay = () => {
+    const newChildren = [];
+    const deck = state.playerData[1].deck;
+    for (let i = 0; i !== deck.length; ++i) {
+        const element = createCardDisplayElement(deck[i]);
+        newChildren.push(element);
+    }
+    draftBotPickedCardContainer.replaceChildren(...newChildren);
+};
+
 const refreshDraftDisplay = () => {
     draftElement.classList.remove("hidden");
     setupElement.classList.add("hidden");
@@ -297,6 +308,7 @@ const refreshDraftDisplay = () => {
     refreshActivePackDisplay();
     refreshPickedDisplay();
     refreshSideboardDisplay();
+    refreshBotPickedDisplay();
 };
 
 /* =====================================================
