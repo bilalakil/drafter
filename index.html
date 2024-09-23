@@ -2,9 +2,45 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="main.css"/>
   <title>Drafter</title>
 </head>
 <body>
-Hello, world!
+<div class="setup">
+  <div class="setup__format">
+    <h2>Format</h2>
+    <p><label>Number of rounds: <input type="number" id="setup__format__number-of-rounds" value="2" min="1"></label></p>
+    <p><label>Cards per pack: <input type="number" id="setup__format__cards-per-pack" value="5" min="1"></label></p>
+    <p><label>Total seats: <input type="number" id="setup__format__total-seats" value="2" min="1"></label></p>
+    <p><button type="submit" id="setup__format__submit">Start draft</button></p>
+    <p id="setup__format__status" class="error-text"></p>
+  </div>
+</div>
+<template id="template__card">
+  <div class="card" data-id="{cardId}">
+    <a>
+      <img src="img/cards/{cardId}.png" alt=""/>
+    </a>
+    <p class="card__debug-text-overlay__top-left">{debugTextTopLeft}</p>
+    <p class="card__debug-text-overlay__top-right">{debugTextTopRight}</p>
+    <p class="card__debug-text-overlay__bottom">{debugTextBottom}</p>
+  </div>
+</template>
+<div class="draft">
+  <div id="draft__choices">
+    <h2><span id="draft__choices__title">Pack {packNumber}, pick {pickNumber}: Pick a card</span></h2>
+    <div id="draft__choices__card-container" class="card-container"></div>
+  </div>
+  <div id="draft__picked">
+    <h2><span id="draft__picked__title">Picked so far: {pickedCount} cards{sideboardCount}</span></h2>
+    <div id="draft__picked__card-container" class="card-container"></div>
+  </div>
+  <div id="draft__sideboard">
+    <h2><span id="draft__sideboard__title">Sideboard: {sideboardCount} cards</span></h2>
+    <div id="draft__sideboard__card-container" class="card-container"></div>
+  </div>
+</div>
+<script src="database.js"></script>
+<script src="main.js"></script>
 </body>
 </html>

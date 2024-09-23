@@ -1,0 +1,54 @@
+﻿/* Card aspect ratio: 2.5 / 3.5 = 0.71428571428 */
+/* Card size: 1000 x 1400 px */
+
+.error-text {
+    color: darkred;
+}
+
+.hidden {
+    display: none;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.card {
+    position: relative;
+    margin: 0.2em;
+    cursor: pointer;
+}
+
+.card img {
+    width: 12em;
+}
+
+.card__debug-text-overlay__top-left,
+.card__debug-text-overlay__top-right,
+.card__debug-text-overlay__bottom {
+    position: absolute;
+    white-space: break-spaces;
+    
+    font-weight: bold;
+    color: white;
+}
+
+.card__debug-text-overlay__top-left {
+    top: 0;
+    left: 1em;
+    right: 1em;
+}
+
+.card__debug-text-overlay__top-right {
+    top: 0;
+    left: 1em;
+    right: 1em;
+    text-align: right;
+}
+
+.card__debug-text-overlay__bottom {
+    bottom: 0;
+    left: 1em;
+    right: 1em;
+}
