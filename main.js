@@ -3,7 +3,7 @@ const draftElement = document.getElementsByClassName("draft")[0];
 
 let state = {
     mode: "specifyFormat",
-}
+};
 
 /* =====================================================
  * HELPERS
@@ -83,6 +83,8 @@ const draftSideboardTitle = document.getElementById("draft__sideboard__title");
 const draftSideboardTitleTemplate = draftSideboardTitle.innerHTML;
 const draftSideboardCardContainer = document.getElementById("draft__sideboard__card-container");
 
+let botStates = [];
+
 const createNewDraftState = (numberOfRounds, cardsPerPack, numberOfSeats) => {
     const newState = {
         mode: "draft",
@@ -94,6 +96,11 @@ const createNewDraftState = (numberOfRounds, cardsPerPack, numberOfSeats) => {
         packsInOtherRounds: [],
         playerData: Array.from({ length: numberOfSeats }, () => ({ deck: [], sideboard: [] })),
     };
+    
+    botStates = Array.from({ length: numberOfSeats }, () => ({
+        hasBuildAround: false,
+        archetypeWeights: {},
+    }));
 
     const shuffledCards = getShuffledArray(cardIds);
     let currentCardIndex = 0;
@@ -116,7 +123,7 @@ const createNewDraftState = (numberOfRounds, cardsPerPack, numberOfSeats) => {
     return newState;
 };
 
-const createCardDisplayElement = (cardId) => {
+const createCardDisplayElement = cardId => {
     const cardData = cardsById[cardId];
     return createElement(
         formatString(cardTemplate, {
@@ -128,14 +135,67 @@ const createCardDisplayElement = (cardId) => {
     );
 };
 
+const getPackForPlayer = playerIndex => state.packsInActiveRound[
+    (state.activeRoundPickNumber + playerIndex) % state.numberOfSeats
+];
+
 const givePlayerCardFromPack = (pack, chosenCardIndex, playerIndex) => {
     const cardId = pack[chosenCardIndex];
     pack.splice(chosenCardIndex, 1);
     state.playerData[playerIndex].deck.push(cardId);
 };
 
+const botGetChoiceWeight = (botState, cardData) => {
+    if (!botState.hasBuildAround && cardData.tags.includes("build-around")) return 99999;
+    
+    let weight = 0;
+    if (cardData.tags.includes("good")) weight += 5;
+    for (const archetype of cardData.archetypes) weight += botState.archetypeWeights[archetype] ?? 0;
+    return weight;
+};
+
+const botRunChoiceAlgorithm = (botState, pack) => {
+    let currentOptimalWeight = -1;
+    let currentOptimalChoices = [];
+    
+    for (const cardId of pack) {
+        const cardData = cardsById[cardId];
+        const weight = botGetChoiceWeight(botState, cardData);
+        if (weight < currentOptimalWeight) continue;
+        if (weight > currentOptimalWeight) {
+            currentOptimalWeight = weight;
+            currentOptimalChoices = [];
+        }
+        currentOptimalChoices.push(cardId);
+    }
+    
+    return currentOptimalChoices[Math.floor(Math.random() * currentOptimalChoices.length)];
+};
+
+const botUpdateWeights = (botState, chosenCardData) => {
+    const weightToAdd = !botState.hasBuildAround && chosenCardData.tags.includes("build-around")
+        ? 10
+        : 1;
+    for (const archetype of chosenCardData.archetypes)
+        botState.archetypeWeights[archetype] = (botState.archetypeWeights[archetype] ?? 0) + weightToAdd;
+};
+
+const botPickCard = playerIndex => {
+    const botState = botStates[playerIndex];
+    const pack = getPackForPlayer(playerIndex);
+    const chosenCardId = botRunChoiceAlgorithm(botState, pack);
+    const chosenCardIndex = pack.indexOf(chosenCardId);
+    const chosenCardData = cardsById[chosenCardId];
+
+    givePlayerCardFromPack(pack, chosenCardIndex, playerIndex);
+    botUpdateWeights(botState, chosenCardData);
+    if (!botState.hasBuildAround && chosenCardData.tags.includes("build-around")) botState.hasBuildAround = true;
+};
+
 const handlePackCardPicked = (activePack, i) => {
     givePlayerCardFromPack(activePack, i, 0);
+    for (let i = 1; i < state.numberOfSeats; ++i) botPickCard(i);
+    
     ++state.activeRoundPickNumber;
     
     if (
@@ -151,7 +211,7 @@ const handlePackCardPicked = (activePack, i) => {
 };
 
 const refreshActivePackDisplay = () => {
-    const activePack = state.packsInActiveRound[state.activeRoundPickNumber % state.numberOfSeats];
+    const activePack = getPackForPlayer(0);
     if (activePack.length === 0) {
         draftChoicesElement.classList.add("hidden");
         return;
