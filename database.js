@@ -1,10 +1,10 @@
-﻿cards = [
+cards = [
     {
-        id: "1",
-        manaCost: 0,
+        id: "Lightning Bolt",
+        manaCost: 1,
         archetypes: [1, 2, 3],
         tags: ["build-around"],
-        debugText: "",
+        debugText: "Deal 3 Damage",
     },
     {
         id: "2",
