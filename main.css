@@ -1,4 +1,4 @@
-﻿/* Card aspect ratio: 2.5 / 3.5 = 0.71428571428 */
+/* Card aspect ratio: 2.5 / 3.5 = 0.71428571428 */
 /* Card size: 1000 x 1400 px */
 
 .error-text {
@@ -48,7 +48,9 @@
 }
 
 .card__debug-text-overlay__bottom {
-    bottom: 0;
-    left: 1em;
-    right: 1em;
+    bottom: 0.75em;
+    left: 1.25em;
+    right: 1.25em;
+		
+		font-size: 0.75em;
 }
