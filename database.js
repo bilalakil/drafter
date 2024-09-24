@@ -1,10 +1,11 @@
 cards = [
     {
-        id: "Lightning Bolt",
-        manaCost: 1,
-        archetypes: [1, 2, 3],
-        tags: ["build-around"],
-        debugText: "Deal 3 Damage",
+        id: "Zpring Bloom",
+        manaCost: 3,
+        archetypes: [],
+        tags: ["good"],
+        debugText: "Sorcery
++20% Mana Regen",
     },
     {
         id: "2",
