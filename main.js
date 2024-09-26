@@ -66,6 +66,28 @@ const refreshFormatDisplay = () => {
     setupFormatStatus.innerText = "";
 };
 
+const populateDistributionTable = () => {
+    const table = document.getElementById("setup__distribution__table");
+    const headerRow = document.getElementById("setup__distribution__table__header-row");
+
+    const archetypes = new Set(cards.flatMap(card => card.archetypes));
+    const tags = new Set(cards.flatMap(card => card.tags));
+    
+    for (const tag of tags) {
+        const th = document.createElement("th");
+        th.innerText = tag;
+        headerRow.appendChild(th);
+    }
+    
+    // TODO: Create "all" row
+    
+    for (const archetype of archetypes) {
+        // TODO: Create archetype row
+    }
+};
+
+populateDistributionTable();
+
 /* =====================================================
  * DRAFT
  * =====================================================
