@@ -66,6 +66,51 @@ const refreshFormatDisplay = () => {
     setupFormatStatus.innerText = "";
 };
 
+const archetypes = new Set(cards.flatMap(card => card.archetypes).sort());
+const tags = new Set(cards.flatMap(card => card.tags).sort());
+    
+const createDistributionTableRow = archetype => {
+    const row = document.createElement("tr");
+    const titleCell = document.createElement("th");
+    titleCell.innerText = archetype;
+    row.appendChild(titleCell);
+
+    const cardsMatchingArchetype = archetype == "All"
+        ? cards
+        : cards.filter(card => card.archetypes.includes(archetype));
+
+    const totalCell = document.createElement("td");
+    totalCell.innerText = cardsMatchingArchetype.length.toString();
+    row.appendChild(totalCell);
+
+    for (const tag of tags) {
+        const cell = document.createElement("td");
+        cell.innerText = cardsMatchingArchetype.filter(card => card.tags.includes(tag)).length.toString();
+        row.appendChild(cell);
+    }
+
+    return row;
+};
+
+const populateDistributionTable = () => {
+    const table = document.getElementById("setup__distribution__table");
+    const headerRow = document.getElementById("setup__distribution__table__header-row");
+
+    for (const tag of tags) {
+        const th = document.createElement("th");
+        th.innerText = tag;
+        headerRow.appendChild(th);
+    }
+    
+    table.appendChild(createDistributionTableRow("All"));
+    
+    for (const archetype of archetypes) {
+        table.appendChild(createDistributionTableRow(archetype));
+    }
+};
+
+populateDistributionTable();
+
 /* =====================================================
  * DRAFT
  * =====================================================
