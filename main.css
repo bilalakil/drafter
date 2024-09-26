@@ -52,5 +52,15 @@
     left: 1.25em;
     right: 1.25em;
 		
-		font-size: 0.75em;
+    font-size: 0.75em;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 0.25em;
+
+    border: solid 1px black;
 }

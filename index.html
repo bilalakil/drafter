@@ -10,20 +10,33 @@
   <div class="setup__format">
     <h2>Format</h2>
     <p><label>Number of rounds: <input type="number" id="setup__format__number-of-rounds" value="2" min="1"></label></p>
-    <p><label>Cards per pack: <input type="number" id="setup__format__cards-per-pack" value="5" min="1"></label></p>
+    <p><label>Cards per pack: <input type="number" id="setup__format__cards-per-pack" value="10" min="1"></label></p>
     <p><label>Total seats: <input type="number" id="setup__format__total-seats" value="2" min="2"></label></p>
     <p><button type="submit" id="setup__format__submit">Start draft</button></p>
     <p id="setup__format__status" class="error-text"></p>
+  </div>
+  <div class="setup__distribution">
+    <h2>Card Distribution</h2>
+    <table>
+      <thead>
+        <tr id="setup__distribution__table__header-row">
+          <th></th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody id="setup__distribution__table">
+      </tbody>
+    </table>
   </div>
 </div>
 <template id="template__card">
   <div class="card" data-id="{cardId}">
     <a>
       <img src="img/cards/{cardId}.png" alt=""/>
-			<p class="card__debug-text-overlay__top-left">{debugTextTopLeft}</p>
-	    <p class="card__debug-text-overlay__top-right">{debugTextTopRight}</p>
-	    <p class="card__debug-text-overlay__bottom">{debugTextBottom}</p>
-	  </a>
+      <p class="card__debug-text-overlay__top-left">{debugTextTopLeft}</p>
+      <p class="card__debug-text-overlay__top-right">{debugTextTopRight}</p>
+      <p class="card__debug-text-overlay__bottom">{debugTextBottom}</p>
+    </a>
   </div>
 </template>
 <div class="draft">
